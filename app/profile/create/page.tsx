@@ -1,31 +1,7 @@
 import { SubmitButton } from "@/components/form/Buttons";
 import FormContainer from "@/components/form/FormContainer";
 import FormInput from "@/components/form/FormInput";
-
-const createProfileAction = async (formData: FormData) => {
-  "use server";
-
-  try {
-    if (!(formData instanceof FormData)) {
-      throw new Error("Invalid form data");
-    }
-
-    const firstName = formData.get("firstName") as string;
-    const lastName = formData.get("lastName") as string;
-    const username = formData.get("username") as string;
-
-    // Validate the data
-    if (!firstName || !lastName || !username) {
-      throw new Error("All fields are required");
-    }
-
-    console.log({ firstName, lastName, username });
-    return { message: "Profile created successfully" };
-  } catch (error) {
-    console.error("Profile creation error:", error);
-    return { message: "Failed to create profile" };
-  }
-};
+import { createProfileAction } from "@/utils/actions";
 
 function CreateProfile() {
   return (
