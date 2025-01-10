@@ -42,3 +42,17 @@ export const createProfileAction = async (
 
   redirect("/");
 };
+
+export const fetchProfileImage = async () => {
+  const user = await currentUser();
+  if (!user) throw new Error("Please login to fetch profile image");
+
+  const profile = await db.profile.findUnique({
+    where: { clerkId: user.id },
+    select: {
+      profileImage: true,
+    },
+  });
+
+  return profile?.profileImage;
+};
