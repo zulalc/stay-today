@@ -4,6 +4,23 @@ import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { profileSchema } from "./schemas";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+const getAuthUser = async () => {
+  const user = await currentUser();
+  if (!user) throw new Error("Please login to access this page");
+  if (!user.privateMetadata?.hasProfile) redirect("/profile/create");
+  return user;
+};
+
+export const fetchProfile = async () => {
+  const user = await getAuthUser();
+  const profile = await db.profile.findUnique({
+    where: { clerkId: user.id },
+  });
+  if (!profile) redirect("/profile/create");
+  return profile;
+};
 
 export const createProfileAction = async (
   prevState: { message?: string; error?: Record<string, string[]> },
@@ -11,8 +28,7 @@ export const createProfileAction = async (
 ) => {
   try {
     // Parse and validate the form data using the schema
-    const user = await currentUser();
-    if (!user) throw new Error("Please login to create a profile");
+    const user = await getAuthUser();
 
     const values = Object.fromEntries(formData);
     const validatedFields = profileSchema.parse(values);
@@ -43,9 +59,31 @@ export const createProfileAction = async (
   redirect("/");
 };
 
+export const updateProfileAction = async (
+  prevState: { message?: string; error?: Record<string, string[]> },
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  try {
+    const values = Object.fromEntries(formData);
+    const validatedFields = profileSchema.parse(values);
+
+    await db.profile.update({
+      where: { clerkId: user.id },
+      data: validatedFields,
+    });
+    revalidatePath("/profile");
+    return { message: "Profile updated successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
 export const fetchProfileImage = async () => {
   const user = await currentUser();
-  if (!user) throw new Error("Please login to fetch profile image");
+  if (!user) return null;
 
   const profile = await db.profile.findUnique({
     where: { clerkId: user.id },
