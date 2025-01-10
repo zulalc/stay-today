@@ -5,7 +5,7 @@ function NavbarSearch() {
     <Input
       type="text"
       placeholder="Find a place to stay..."
-      className="max-w-xs dark:bg-muted"
+      className="max-w-xs dark:bg-muted rounded-full px-4"
     />
   );
 }

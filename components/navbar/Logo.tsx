@@ -5,9 +5,9 @@ import { HouseIcon } from "lucide-react";
 function Logo() {
   return (
     <Link href="/" className="flex items-center space-x-1">
-      <Button size="icon" asChild>
+      <Button size="icon" className="rounded-full" asChild>
         <div>
-          <HouseIcon className="w-6 h-6" />
+          <HouseIcon className="w-8 h-8" />
         </div>
       </Button>
       <span className="text-lg">staytoday</span>
