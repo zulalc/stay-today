@@ -1,4 +1,4 @@
 export type actionFunction = (
-  prevState: any,
+  prevState: { message?: string; error?: Record<string, string[]> },
   formData: FormData
 ) => Promise<{ message: string }>;
