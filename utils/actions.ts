@@ -2,7 +2,7 @@
 
 import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { profileSchema } from "./schemas";
+import { profileSchema, validateWithZodSchema } from "./schemas";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -31,7 +31,7 @@ export const createProfileAction = async (
     const user = await getAuthUser();
 
     const values = Object.fromEntries(formData);
-    const validatedFields = profileSchema.parse(values);
+    const validatedFields = validateWithZodSchema(profileSchema, values);
 
     await db.profile.create({
       data: {
@@ -66,7 +66,7 @@ export const updateProfileAction = async (
   const user = await getAuthUser();
   try {
     const values = Object.fromEntries(formData);
-    const validatedFields = profileSchema.parse(values);
+    const validatedFields = validateWithZodSchema(profileSchema, values);
 
     await db.profile.update({
       where: { clerkId: user.id },
@@ -93,4 +93,11 @@ export const fetchProfileImage = async () => {
   });
 
   return profile?.profileImage;
+};
+
+export const updateProfileImageAction = async (
+  prevState: { message?: string; error?: Record<string, string[]> },
+  formData: FormData
+): Promise<{ message: string }> => {
+  return { message: "Profile image updated successfully!" };
 };
