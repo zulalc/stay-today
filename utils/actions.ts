@@ -2,9 +2,10 @@
 
 import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { profileSchema, validateWithZodSchema } from "./schemas";
+import { imageSchema, profileSchema, validateWithZodSchema } from "./schemas";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { uploadImage } from "./supabase";
 
 const getAuthUser = async () => {
   const user = await currentUser();
@@ -99,5 +100,33 @@ export const updateProfileImageAction = async (
   prevState: { message?: string; error?: Record<string, string[]> },
   formData: FormData
 ): Promise<{ message: string }> => {
-  return { message: "Profile image updated successfully!" };
+  const user = await getAuthUser();
+  try {
+    const image = formData.get("image") as File;
+    const validatedFields = validateWithZodSchema(imageSchema, { image });
+    const path = await uploadImage(validatedFields.image);
+
+    await db.profile.update({
+      where: { clerkId: user.id },
+      data: { profileImage: path },
+    });
+    revalidatePath("/profile");
+    return { message: "Image updated succesfully" };
+  } catch (error) {
+    // Log the full error object for debugging
+    console.error("Profile Image Update Error:", error);
+
+    // If it's a Supabase error, it might have a message property
+    if (error && typeof error === "object" && "message" in error) {
+      return { message: error.message as string };
+    }
+
+    // If it's a standard Error object
+    if (error instanceof Error) {
+      return { message: error.message };
+    }
+
+    // If we can't determine the error type, stringify it
+    return { message: JSON.stringify(error) };
+  }
 };
