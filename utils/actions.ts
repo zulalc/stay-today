@@ -2,7 +2,12 @@
 
 import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
-import { imageSchema, profileSchema, validateWithZodSchema } from "./schemas";
+import {
+  imageSchema,
+  profileSchema,
+  propertySchema,
+  validateWithZodSchema,
+} from "./schemas";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "./supabase";
@@ -13,6 +18,8 @@ const getAuthUser = async () => {
   if (!user.privateMetadata?.hasProfile) redirect("/profile/create");
   return user;
 };
+
+//PROFILE ACTIONS
 
 export const fetchProfile = async () => {
   const user = await getAuthUser();
@@ -129,4 +136,23 @@ export const updateProfileImageAction = async (
     // If we can't determine the error type, stringify it
     return { message: JSON.stringify(error) };
   }
+};
+
+//PROPERTY ACTIONS
+
+export const createPropertyAction = async (
+  prevState: { message?: string; error?: Record<string, string[]> },
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  try {
+    const values = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(propertySchema, values);
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+
+  redirect("/");
 };
