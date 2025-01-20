@@ -1,5 +1,6 @@
 import { SubmitButton } from "@/components/form/Buttons";
 import CategoriesInput from "@/components/form/CategoriesInput";
+import CounterInput from "@/components/form/CounterInput";
 import CountriesInput from "@/components/form/CountriesInput";
 import FormContainer from "@/components/form/FormContainer";
 import FormInput from "@/components/form/FormInput";
@@ -13,7 +14,9 @@ function CreateProperty() {
     <section className="flex flex-col items-center justify-center">
       <h1 className="text-2xl font-semibold mb-8">Create Property</h1>
       <div className="border p-8 rounded-md max-w-md w-full">
-        <h3 className="text-lg mb-4 font-medium">General Information</h3>
+        <h3 className="text-lg mb-4 font-medium text-center">
+          General Information
+        </h3>
         <FormContainer action={createPropertyAction}>
           <div className="grid md:grid-cols-2 gap-8 mb-4">
             <FormInput
@@ -39,6 +42,13 @@ function CreateProperty() {
             <CountriesInput />
             <ImageInput />
           </div>
+          <h3 className="text-lg mt-8 mb-4 font-medium text-center">
+            Accommodation Details
+          </h3>
+          <CounterInput detail="guests" />
+          <CounterInput detail="bedrooms" />
+          <CounterInput detail="beds" />
+          <CounterInput detail="baths" />
           <SubmitButton text="Create Property" className="mt-8 w-full" />
         </FormContainer>
       </div>
