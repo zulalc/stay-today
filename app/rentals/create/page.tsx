@@ -3,6 +3,7 @@ import CategoriesInput from "@/components/form/CategoriesInput";
 import FormContainer from "@/components/form/FormContainer";
 import FormInput from "@/components/form/FormInput";
 import PriceInput from "@/components/form/PriceInput";
+import TextAreaInput from "@/components/form/TextAreaInput";
 import { createPropertyAction } from "@/utils/actions";
 
 function CreateProperty() {
@@ -28,6 +29,10 @@ function CreateProperty() {
             <PriceInput />
             <CategoriesInput />
           </div>
+          <TextAreaInput
+            name="description"
+            label="Description (10 - 1000 Words)"
+          />
           <SubmitButton text="Create Property" className="mt-8 w-full" />
         </FormContainer>
       </div>
