@@ -147,7 +147,18 @@ export const createPropertyAction = async (
   const user = await getAuthUser();
   try {
     const values = Object.fromEntries(formData);
+    const image = formData.get("image") as File;
     const validatedFields = validateWithZodSchema(propertySchema, values);
+    const validatedImage = validateWithZodSchema(imageSchema, { image: image });
+    const path = await uploadImage(validatedImage.image);
+
+    await db.property.create({
+      data: {
+        ...validatedFields,
+        image: path,
+        profileId: user.id,
+      },
+    });
   } catch (error) {
     return {
       message: error instanceof Error ? error.message : "An error occurred",
