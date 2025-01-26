@@ -147,8 +147,19 @@ export const createPropertyAction = async (
   const user = await getAuthUser();
   try {
     const values = Object.fromEntries(formData);
+
     const image = formData.get("image") as File;
-    const validatedFields = validateWithZodSchema(propertySchema, values);
+
+    const parsedValues = {
+      ...values,
+      price: parseFloat(values.price as string),
+      guests: parseFloat(values.guests as string),
+      bedrooms: parseFloat(values.bedrooms as string),
+      beds: parseFloat(values.beds as string),
+      bathrooms: parseFloat(values.bathrooms as string),
+    };
+
+    const validatedFields = validateWithZodSchema(propertySchema, parsedValues);
     const validatedImage = validateWithZodSchema(imageSchema, { image: image });
     const path = await uploadImage(validatedImage.image);
 
