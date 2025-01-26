@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-const name = "Country";
+const name = "country";
 function CountriesInput({ defaultValue }: { defaultValue?: string }) {
   return (
     <div className="mb-2">
