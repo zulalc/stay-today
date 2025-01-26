@@ -14,7 +14,7 @@ function CreateProperty() {
   return (
     <section className="flex flex-col items-center justify-center">
       <h1 className="text-2xl font-semibold mb-8">Create Property</h1>
-      <div className="border p-8 rounded-md max-w-md w-full">
+      <div className="border p-8 rounded-md max-w-2xl w-full">
         <h3 className="text-lg mb-4 font-medium text-center">
           General Information
         </h3>
@@ -49,7 +49,7 @@ function CreateProperty() {
           <CounterInput detail="guests" />
           <CounterInput detail="bedrooms" />
           <CounterInput detail="beds" />
-          <CounterInput detail="baths" />
+          <CounterInput detail="bathrooms" />
           <h3 className="text-lg mt-10 mb-6 font-medium">Amenities</h3>
           <AmenitiesInput />
           <SubmitButton text="Create Property" className="mt-8 w-full" />
