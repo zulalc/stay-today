@@ -2,6 +2,9 @@ import { formatCurrency } from "@/utils/format";
 import { PropertyProps } from "@/utils/types";
 import Image from "next/image";
 import Link from "next/link";
+import PropertyRating from "./PropertyRating";
+import FavToggleButton from "./FavToggleButton";
+import CountryDetails from "./CountryDetails";
 
 function PropertyCard({ property }: { property: PropertyProps }) {
   const { name, image, price } = property;
@@ -22,6 +25,7 @@ function PropertyCard({ property }: { property: PropertyProps }) {
           <h3 className="text-sm font-semibold mt-1">
             {name.substring(0, 20)}
           </h3>
+          <PropertyRating inPage={false} propertyId={propertyId} />
         </div>
 
         <p className="text-sm mt-1 text-muted-foreground">
@@ -33,9 +37,12 @@ function PropertyCard({ property }: { property: PropertyProps }) {
             <span className="font-semibold">{formatCurrency(price)}</span>
             night
           </p>
+          <CountryDetails countryCode={country} />
         </div>
       </Link>
-      <div className="absolute top-5 right-5 z-5"></div>
+      <div className="absolute top-5 right-5 z-5">
+        <FavToggleButton propertyId={propertyId} />
+      </div>
     </article>
   );
 }
