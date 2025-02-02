@@ -1,6 +1,7 @@
 import { fetchProperties } from "@/utils/actions";
 import { PropertyProps } from "@/utils/types";
 import EmptyList from "./EmptyList";
+import PropertyList from "./PropertyList";
 
 async function PropertiesContainer({
   search,
@@ -24,7 +25,7 @@ async function PropertiesContainer({
     );
   }
 
-  return <div></div>;
+  return <PropertyList properties={properties} />;
 }
 
 export default PropertiesContainer;
