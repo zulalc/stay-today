@@ -14,9 +14,11 @@ function EmptyList({
     <div className="mt-4">
       <h2 className="text-xl font-bold">{heading}</h2>
       <p className="text-lg">{message}</p>
-      <Button asChild className="mt-4 size='lg'">
-        <Link href="/">{btnText}</Link>
-      </Button>
+      <div className="flex items-center justify-center ">
+        <Button asChild className="mt-4 size='lg'">
+          <Link href="/">{btnText}</Link>
+        </Button>
+      </div>
     </div>
   );
 }
