@@ -1,6 +1,7 @@
+"use client";
 import { Star } from "lucide-react";
 
-async function PropertyRating({
+function PropertyRating({
   propertyId,
   inPage,
 }: {
