@@ -9,6 +9,10 @@ import CountryDetails from "./CountryDetails";
 function PropertyCard({ property }: { property: PropertyProps }) {
   const { name, image, price } = property;
   const { country, id: propertyId, tagline } = property;
+
+  const truncateText = (text: string, length: number) =>
+    text.length > length ? text.substring(0, length) + "..." : text;
+
   return (
     <article className="group relative">
       <Link href={`/property/${propertyId}`}>
@@ -23,18 +27,18 @@ function PropertyCard({ property }: { property: PropertyProps }) {
         </div>
         <div className="flex justify-between items-center">
           <h3 className="text-sm font-semibold mt-1">
-            {name.substring(0, 20)}
+            {truncateText(name, 20)}
           </h3>
           <PropertyRating inPage={false} propertyId={propertyId} />
         </div>
 
         <p className="text-sm mt-1 text-muted-foreground">
-          {tagline.substring(0, 50)}
+          {truncateText(tagline, 50)}
         </p>
 
         <div className="flex justify-between items-center mt-1">
           <p className="text-sm">
-            <span className="font-semibold">{formatCurrency(price)}</span>
+            <span className="font-semibold mr-1">{formatCurrency(price)}</span>
             night
           </p>
           <CountryDetails countryCode={country} />
