@@ -206,3 +206,72 @@ export const fetchProperties = async ({
 
   return properties;
 };
+
+export const fetchPropertyDetails = (id: string) => {
+  return db.property.findUnique({
+    where: { id },
+    include: {
+      profile: true,
+    },
+  });
+};
+
+export const fetchFavorite = async ({ propertyId }: { propertyId: string }) => {
+  const user = await getAuthUser();
+  const favorite = await db.favorite.findFirst({
+    where: { profileId: user.id, propertyId },
+    select: { id: true },
+  });
+
+  return favorite?.id || null;
+};
+
+export const toggleFavorite = async (prevState: {
+  propertyId: string;
+  favoriteId: string | null;
+  pathname: string;
+}) => {
+  const user = await getAuthUser();
+  const { propertyId, favoriteId, pathname } = prevState;
+  try {
+    if (favoriteId) {
+      await db.favorite.delete({ where: { id: favoriteId } });
+    } else {
+      await db.favorite.create({
+        data: {
+          profileId: user.id,
+          propertyId,
+        },
+      });
+    }
+    revalidatePath(pathname);
+    return {
+      message: favoriteId ? "Removed from Favorites" : "Added to Favorites",
+    };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+export const fetchFavorites = async () => {
+  const user = await getAuthUser();
+  const favorites = await db.favorite.findMany({
+    where: { profileId: user.id },
+    select: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          country: true,
+          tagline: true,
+          price: true,
+          image: true,
+        },
+      },
+    },
+  });
+
+  return favorites.map((favorite) => favorite.property);
+};
