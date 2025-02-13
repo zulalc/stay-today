@@ -5,11 +5,13 @@ import {
   TwitterShareButton,
   EmailShareButton,
   LinkedinShareButton,
-  TwitterIcon,
   EmailIcon,
   LinkedinIcon,
   FacebookIcon,
   FacebookShareButton,
+  XIcon,
+  WhatsappShareButton,
+  WhatsappIcon,
 } from "react-share";
 
 function ShareButton({
@@ -34,21 +36,27 @@ function ShareButton({
         sideOffset={8}
         className="flex items-center gap-x-2 justify-center w-full"
       >
-        <TwitterShareButton url={shareLink} title={name}>
-          <TwitterIcon size={32} round />
-        </TwitterShareButton>
+        <div className="flex gap-x-2">
+          <TwitterShareButton url={shareLink} title={name}>
+            <XIcon size={32} round />
+          </TwitterShareButton>
 
-        <FacebookShareButton url={shareLink} title={name}>
-          <FacebookIcon size={32} round />
-        </FacebookShareButton>
+          <FacebookShareButton url={shareLink} title={name}>
+            <FacebookIcon size={32} round />
+          </FacebookShareButton>
 
-        <LinkedinShareButton url={shareLink} title={name}>
-          <LinkedinIcon size={32} round />
-        </LinkedinShareButton>
+          <WhatsappShareButton url={shareLink} title={name}>
+            <WhatsappIcon size={32} round />
+          </WhatsappShareButton>
 
-        <EmailShareButton url={shareLink} title={name}>
-          <EmailIcon size={32} round />
-        </EmailShareButton>
+          <LinkedinShareButton url={shareLink} title={name}>
+            <LinkedinIcon size={32} round />
+          </LinkedinShareButton>
+
+          <EmailShareButton url={shareLink} title={name}>
+            <EmailIcon size={32} round />
+          </EmailShareButton>
+        </div>
       </PopoverContent>
     </Popover>
   );

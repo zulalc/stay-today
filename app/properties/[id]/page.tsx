@@ -1,6 +1,7 @@
 "use client";
 import FavToggleButton from "@/components/card/FavToggleButton";
 import PropertyRating from "@/components/card/PropertyRating";
+import BookingCalendar from "@/components/properties/booking/BookingCalendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import ImageContainer from "@/components/properties/ImageContainer";
 import ShareButton from "@/components/properties/ShareButton";
@@ -8,6 +9,7 @@ import { fetchPropertyDetails } from "@/utils/actions";
 import { PropertyDetailsProps } from "@/utils/types";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PropertyDetails from "../PropertyDetails";
 
 function PropertyDetailsPage() {
   const { id } = useParams() as { id: string };
@@ -42,7 +44,7 @@ function PropertyDetailsPage() {
             name={propertyDetails.name}
             propertyId={propertyDetails.id}
           />
-          <FavToggleButton propertyId={id} />
+          <FavToggleButton propertyId={id} variant="ghost" />
         </div>
       </header>
       <ImageContainer
@@ -54,10 +56,11 @@ function PropertyDetailsPage() {
           <div className="flex gap-x-4 items-center">
             <h1 className="text-xl font-bold">{propertyDetails.name}</h1>
             <PropertyRating inPage propertyId={id} />
+            <PropertyDetails propertyDetails={propertyDetails} />
           </div>
         </div>
         <div className="lg:col-span-4 flex flex-col items-center">
-          {/*calendar*/}
+          <BookingCalendar />
         </div>
       </section>
     </section>
