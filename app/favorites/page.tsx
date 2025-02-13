@@ -1,3 +1,4 @@
+"use client";
 import EmptyList from "@/components/home/EmptyList";
 import PropertyList from "@/components/home/PropertyList";
 import { fetchFavorites } from "@/utils/actions";
@@ -13,16 +14,23 @@ function Favorites() {
   }, []);
 
   if (!favorites.length) {
-    <div className="flex justify-center items-center h-[300px]">
-      <EmptyList
-        heading="No Favorites"
-        message="Start adding properties to your favorites"
-        btnText="Browse Listings"
-      />
-    </div>;
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <EmptyList
+          heading="No Favorites"
+          message="Start adding properties to your favorites"
+          btnText="Browse Listings"
+        />
+      </div>
+    );
   }
 
-  return <PropertyList properties={favorites} />;
+  return (
+    <>
+      <h1 className="text-3xl font-semibold mb-8 text-center">Favorites</h1>
+      <PropertyList properties={favorites} />
+    </>
+  );
 }
 
 export default Favorites;
