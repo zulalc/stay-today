@@ -11,3 +11,16 @@ export type PropertyProps = {
   price: number;
   image: string;
 };
+
+export type PropertyDetailsProps = {
+  id: string;
+  name: string;
+  country: string;
+  tagline: string;
+  price: number;
+  image: string;
+  bathrooms: number;
+  bedrooms: number;
+  beds: number;
+  guests: number;
+};
