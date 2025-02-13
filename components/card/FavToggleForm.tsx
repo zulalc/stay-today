@@ -6,9 +6,14 @@ import { CardSubmitButton } from "../form/Buttons";
 type FavToggleFormProps = {
   propertyId: string;
   favoriteId: string | null;
+  variant?: "favtogglebutton" | "ghost";
 };
 
-function FavToggleForm({ favoriteId, propertyId }: FavToggleFormProps) {
+function FavToggleForm({
+  favoriteId,
+  propertyId,
+  variant,
+}: FavToggleFormProps) {
   const pathname = usePathname();
   const toggleAction = toggleFavorite.bind(null, {
     propertyId,
@@ -17,7 +22,7 @@ function FavToggleForm({ favoriteId, propertyId }: FavToggleFormProps) {
   });
   return (
     <FormContainer action={toggleAction}>
-      <CardSubmitButton isFavorite={!!favoriteId} />
+      <CardSubmitButton isFavorite={!!favoriteId} variant={variant} />
     </FormContainer>
   );
 }

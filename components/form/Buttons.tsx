@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SignInButton } from "@clerk/nextjs";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
+import clsx from "clsx";
 
 type btnSize = "default" | "sm" | "lg";
 
@@ -49,22 +50,40 @@ export const CardSignInButton = () => {
   );
 };
 
-export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
-  const { pending } = useFormStatus();
+type CardSubmitButtonProps = {
+  isFavorite: boolean;
+  variant?: "favtogglebutton" | "ghost";
+};
 
+export const CardSubmitButton = ({
+  isFavorite,
+  variant = "favtogglebutton",
+}: CardSubmitButtonProps) => {
+  const { pending } = useFormStatus();
+  const textColor = variant === "ghost" ? "text-black" : "text-white";
   return (
     <Button
       type="submit"
       size="icon"
-      variant="outline"
-      className="p-2 cursor-pointer"
+      variant={variant}
+      className="cursor-pointer"
     >
       {pending ? (
-        <ReloadIcon className="h-4 w-4 animate-spin" />
+        <ReloadIcon className="h-4 w-4 text-white animate-spin" />
       ) : isFavorite ? (
-        <BsHeartFill />
+        <BsHeartFill
+          className={clsx(
+            "drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] group-hover:text-gray-900 transition-all",
+            textColor
+          )}
+        />
       ) : (
-        <BsHeart />
+        <BsHeart
+          className={clsx(
+            "drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] group-hover:text-gray-900 transition-all",
+            textColor
+          )}
+        />
       )}
     </Button>
   );
