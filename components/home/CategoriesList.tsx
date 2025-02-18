@@ -12,7 +12,7 @@ function CategoriesList({
   const searchWord = search ? `&search=${search}` : "";
 
   return (
-    <section className="w-full max-w-screen-md mx-auto">
+    <section className="w-full max-w-screen-lg mx-auto">
       <ScrollArea className="p-4 w-full overflow-x-auto">
         <ScrollBar orientation="horizontal" />
         <div className="flex gap-x-4 w-max">
