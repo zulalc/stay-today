@@ -22,7 +22,7 @@ function PropertyCard({ property }: { property: PropertyProps }) {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw"
             alt={name}
-            className="object-cover rounded-md transform group-hover:scale-105 transition-transform duration-500"
+            className="object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-500"
           />
         </div>
         <div className="flex justify-between items-center">
