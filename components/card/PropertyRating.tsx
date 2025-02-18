@@ -1,5 +1,5 @@
 "use client";
-import { Star } from "lucide-react";
+import { BsStarFill } from "react-icons/bs";
 
 function PropertyRating({
   propertyId,
@@ -15,7 +15,7 @@ function PropertyRating({
   const reviewValue = `(${totalReviews} ${inPage ? reviewCount : ""})`;
   return (
     <span className={className}>
-      <Star className="w-3 h-3" />
+      <BsStarFill className="w-3 h-3" />
       {rating} {reviewValue}
     </span>
   );
