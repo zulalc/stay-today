@@ -8,8 +8,20 @@ import ShareButton from "@/components/properties/ShareButton";
 import { fetchPropertyDetails } from "@/utils/actions";
 import { PropertyDetailsProps } from "@/utils/types";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import PropertyDetails from "../PropertyDetails";
+import { useEffect, useMemo, useState } from "react";
+import PropertyDetails from "@/components/properties/PropertyDetails";
+import UserInfo from "@/components/properties/UserInfo";
+import { Separator } from "@/components/ui/separator";
+import Description from "@/components/properties/Description";
+import Amenities from "@/components/properties/Amenities";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+import { findCountryByCode } from "@/utils/countries";
+
+const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[400px] w-full" />,
+});
 
 function PropertyDetailsPage() {
   const { id } = useParams() as { id: string };
@@ -17,7 +29,6 @@ function PropertyDetailsPage() {
 
   const [propertyDetails, setPropertyDetails] =
     useState<PropertyDetailsProps | null>(null);
-
   useEffect(() => {
     if (!id) return;
 
@@ -31,6 +42,9 @@ function PropertyDetailsPage() {
   }, [id, router]);
 
   if (!propertyDetails) return <div>Loading...</div>;
+
+  const firstName = propertyDetails.profile.firstName;
+  const profileImage = propertyDetails.profile.profileImage;
 
   const { bathrooms, bedrooms, beds, guests } = propertyDetails;
   const details = { bathrooms, bedrooms, beds, guests };
@@ -53,11 +67,18 @@ function PropertyDetailsPage() {
       />
       <section className="lg:grid lg:grid-cols-12 gap-x-12 mt-12">
         <div className="lg:col-span-8">
-          <div className="flex gap-x-4 items-center">
-            <h1 className="text-xl font-bold">{propertyDetails.name}</h1>
-            <PropertyRating inPage propertyId={id} />
-            <PropertyDetails propertyDetails={propertyDetails} />
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-x-4">
+              <h1 className="text-xl font-bold">{propertyDetails.name}</h1>
+              <PropertyRating inPage propertyId={propertyDetails.id} />
+            </div>
+            <UserInfo profile={{ firstName, profileImage }} />
           </div>
+          <PropertyDetails propertyDetails={propertyDetails} />
+          <Separator className="mt-4" />
+          <Description description={propertyDetails.description} />
+          <Amenities amenities={propertyDetails.amenities} />
+          <DynamicMap countryCode={propertyDetails.country} />
         </div>
         <div className="lg:col-span-4 flex flex-col items-center">
           <BookingCalendar />
