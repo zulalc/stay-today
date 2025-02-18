@@ -7,7 +7,7 @@ function PropertyDetails({
   propertyDetails: PropertyDetailsProps;
 }) {
   return (
-    <p className="text-md font-light ">
+    <p className="text-md font-normal ">
       <span>
         {formatQuantity(propertyDetails.bedrooms, "bedroom")} &middot;{" "}
       </span>
