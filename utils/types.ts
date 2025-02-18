@@ -23,4 +23,17 @@ export type PropertyDetailsProps = {
   bedrooms: number;
   beds: number;
   guests: number;
+  description: string;
+  amenities: string;
+  profile: {
+    profileImage: string;
+    firstName: string;
+  };
+};
+
+export type UserInfoProps = {
+  profile: {
+    profileImage: string;
+    firstName: string;
+  };
 };
