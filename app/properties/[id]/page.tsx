@@ -8,7 +8,7 @@ import ShareButton from "@/components/properties/ShareButton";
 import { fetchPropertyDetails } from "@/utils/actions";
 import { PropertyDetailsProps } from "@/utils/types";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import PropertyDetails from "@/components/properties/PropertyDetails";
 import UserInfo from "@/components/properties/UserInfo";
 import { Separator } from "@/components/ui/separator";
@@ -16,7 +16,6 @@ import Description from "@/components/properties/Description";
 import Amenities from "@/components/properties/Amenities";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
-import { findCountryByCode } from "@/utils/countries";
 
 const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
   ssr: false,
@@ -45,9 +44,6 @@ function PropertyDetailsPage() {
 
   const firstName = propertyDetails.profile.firstName;
   const profileImage = propertyDetails.profile.profileImage;
-
-  const { bathrooms, bedrooms, beds, guests } = propertyDetails;
-  const details = { bathrooms, bedrooms, beds, guests };
   return (
     <section>
       <BreadCrumbs name={propertyDetails.name} />
@@ -77,8 +73,7 @@ function PropertyDetailsPage() {
           <PropertyDetails propertyDetails={propertyDetails} />
           <Separator className="mt-4" />
           <Description description={propertyDetails.description} />
-          <Amenities amenities={propertyDetails.amenities} />
-          <DynamicMap countryCode={propertyDetails.country} />
+          <Amenities amenities={propertyDetails.amenities} />S
         </div>
         <div className="lg:col-span-4 flex flex-col items-center">
           <BookingCalendar />
