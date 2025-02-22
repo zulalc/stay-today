@@ -1,4 +1,3 @@
-import { Prisma } from "@prisma/client";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 

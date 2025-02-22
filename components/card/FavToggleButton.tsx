@@ -29,6 +29,10 @@ function FavToggleButton({
 
   if (!userId) return <CardSignInButton />;
 
+  if (loading) {
+    return <div className="animate-pulse">Loading...</div>;
+  }
+
   return (
     <FavToggleForm
       favoriteId={favoriteId}

@@ -6,13 +6,12 @@ import { useDebouncedCallback } from "use-debounce";
 
 function NavbarSearch() {
   const searchParams = useSearchParams();
-  const pathname = usePathname(); //get current URL path
-  const { replace } = useRouter(); //update URL without full page reload
-  const [search, setSearch] = useState(
-    searchParams.get("search")?.toString || ""
-  );
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const searchQuery = searchParams.get("search") || ""; // Extracted to a variable
+  const [search, setSearch] = useState(searchQuery);
 
-  //DebouncedCallback: Delays function execution to prevent excessive updates when typing.
+  // DebouncedCallback: Delays function execution to prevent excessive updates when typing.
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
@@ -24,10 +23,8 @@ function NavbarSearch() {
   }, 300);
 
   useEffect(() => {
-    if (!searchParams.get("search")) {
-      setSearch("");
-    }
-  }, [searchParams.get("search")]);
+    setSearch(searchQuery);
+  }, [searchQuery]); // Now tracking only the extracted variable
 
   return (
     <Input

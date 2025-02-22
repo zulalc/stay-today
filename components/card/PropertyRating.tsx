@@ -16,7 +16,7 @@ function PropertyRating({
   return (
     <span className={className}>
       <BsStarFill className="w-3 h-3" />
-      {rating} {reviewValue}
+      {rating} {reviewValue} {propertyId}
     </span>
   );
 }

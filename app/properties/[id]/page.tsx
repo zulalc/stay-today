@@ -17,10 +17,10 @@ import Amenities from "@/components/properties/Amenities";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
+/*const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
   ssr: false,
   loading: () => <Skeleton className="h-[400px] w-full" />,
-});
+});*/
 
 function PropertyDetailsPage() {
   const { id } = useParams() as { id: string };
