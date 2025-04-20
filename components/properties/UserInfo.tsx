@@ -10,8 +10,9 @@ function UserInfo({ profile: { profileImage, firstName } }: UserInfoProps) {
           Hosted by <span className="font-bold">{firstName}</span>
         </p>
 
-        <div className="flex gap-4">
-          <p className="text-sm text-muted-foreground font-light">Superhost</p>
+        <div className="flex gap-2">
+          <p className="text-sm text-muted-foreground font-medium">Superhost</p>
+          &middot;
           <p className="text-sm text-muted-foreground font-light">
             Joined in 2020
           </p>

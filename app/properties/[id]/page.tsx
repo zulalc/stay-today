@@ -61,22 +61,33 @@ function PropertyDetailsPage() {
         image={propertyDetails.image}
         name={propertyDetails.name}
       />
-      <section className="lg:grid lg:grid-cols-12 gap-x-12 mt-12">
-        <div className="lg:col-span-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-x-4">
-              <h1 className="text-xl font-bold">{propertyDetails.name}</h1>
+      <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-x-8">
+        <div className="lg:col-span-8 space-y-4">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                {propertyDetails.name}
+              </h1>
               <PropertyRating inPage propertyId={propertyDetails.id} />
             </div>
             <UserInfo profile={{ firstName, profileImage }} />
           </div>
-          <PropertyDetails propertyDetails={propertyDetails} />
-          <Separator className="mt-4" />
+
+          <div className="flex justify-between items-start">
+            <PropertyDetails propertyDetails={propertyDetails} />
+          </div>
+
+          <Separator className="mt-2" />
+
           <Description description={propertyDetails.description} />
-          <Amenities amenities={propertyDetails.amenities} />S
+
+          <Amenities amenities={propertyDetails.amenities} />
         </div>
-        <div className="lg:col-span-4 flex flex-col items-center">
-          <BookingCalendar />
+
+        <div className="lg:col-span-4 mt-8 lg:mt-0">
+          <div className="sticky top-20">
+            <BookingCalendar />
+          </div>
         </div>
       </section>
     </section>
