@@ -8,7 +8,7 @@ function CountryDetails({ countryCode }: { countryCode: string }) {
       : country!.name;
   return (
     <span className="flex justify-between items-center gap-2 text-sm">
-      {country?.flag} {countryName}
+      {countryName}
     </span>
   );
 }
