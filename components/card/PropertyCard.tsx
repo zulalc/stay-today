@@ -15,7 +15,7 @@ function PropertyCard({ property }: { property: PropertyProps }) {
     text.length > length ? text.substring(0, length) + "..." : text;
 
   return (
-    <article className="group relative rounded-2xl overflow-hidden shadow-md transition hover:shadow-xl bg-white border border-gray-200">
+    <article className="group relative rounded-2xl overflow-hidden shadow-md transition hover:shadow-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700">
       <Link href={`/properties/${propertyId}`}>
         <div className="relative h-[280px]">
           <Image
@@ -33,24 +33,24 @@ function PropertyCard({ property }: { property: PropertyProps }) {
         </div>
 
         <div className="p-4">
-          <div className="flex justify-between items-center mb-2 text-sm text-gray-500">
+          <div className="flex justify-between items-center mb-2 text-sm text-gray-500 dark:text-gray-400">
             <div className="flex items-center gap-1">
-              <FaMapMarkerAlt className="text-gray-400" />
+              <FaMapMarkerAlt className="text-gray-400 dark:text-gray-500" />
               <CountryDetails countryCode={country} />
             </div>
             <PropertyRating inPage={false} propertyId={propertyId} />
           </div>
 
-          <h3 className="text-base font-semibold text-gray-900">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
             {truncateText(name, 30)}
           </h3>
 
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground mt-1 dark:text-gray-400">
             {truncateText(tagline, 60)}
           </p>
 
           <div className="mt-3 text-right">
-            <p className="text-primary text-lg font-bold">
+            <p className="text-primary text-lg font-bold dark:text-violet-500">
               {formatCurrency(price)}
             </p>
           </div>
