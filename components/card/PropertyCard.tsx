@@ -49,7 +49,7 @@ function PropertyCard({ property }: { property: PropertyProps }) {
             {truncateText(tagline, 60)}
           </p>
 
-          <div className="mt-3 text-right">
+          <div className="text-right">
             <p className="text-primary text-lg font-bold dark:text-violet-500">
               {formatCurrency(price)}
             </p>
