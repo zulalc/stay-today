@@ -16,6 +16,7 @@ import Description from "@/components/properties/Description";
 import Amenities from "@/components/properties/Amenities";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
+import Loading from "./loading";
 
 /*const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
   ssr: false,
@@ -40,15 +41,18 @@ function PropertyDetailsPage() {
     });
   }, [id, router]);
 
-  if (!propertyDetails) return <div>Loading...</div>;
+  if (!propertyDetails) return <Loading />;
 
   const firstName = propertyDetails.profile.firstName;
   const profileImage = propertyDetails.profile.profileImage;
   return (
     <section>
       <BreadCrumbs name={propertyDetails.name} />
+
       <header className="flex justify-between items-center mt-4">
-        <h1 className="text-4xl font-bold">{propertyDetails.tagline}</h1>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-bold">{propertyDetails.tagline}</h1>
+        </div>
         <div className="flex items-center gap-x-4">
           <ShareButton
             name={propertyDetails.name}
@@ -57,29 +61,35 @@ function PropertyDetailsPage() {
           <FavToggleButton propertyId={id} variant="ghost" />
         </div>
       </header>
+
       <ImageContainer
         image={propertyDetails.image}
         name={propertyDetails.name}
       />
-      <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-x-8">
-        <div className="lg:col-span-8 space-y-4">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-2xl font-semibold text-gray-900">
+
+      <section className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-8 flex flex-col gap-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-6">
+            <div className="flex items-center gap-x-4">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
                 {propertyDetails.name}
-              </h1>
+              </h2>
               <PropertyRating inPage propertyId={propertyDetails.id} />
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:justify-between items-start gap-6">
+            <div className="text-gray-700 dark:text-gray-300">
+              <PropertyDetails propertyDetails={propertyDetails} />
             </div>
             <UserInfo profile={{ firstName, profileImage }} />
           </div>
 
-          <div className="flex justify-between items-start">
-            <PropertyDetails propertyDetails={propertyDetails} />
+          <Separator />
+
+          <div className="dark:text-gray-300">
+            <Description description={propertyDetails.description} />
           </div>
-
-          <Separator className="mt-2" />
-
-          <Description description={propertyDetails.description} />
 
           <Amenities amenities={propertyDetails.amenities} />
         </div>
