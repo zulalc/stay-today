@@ -16,19 +16,15 @@ export default Loading;
 export function LoadingCard() {
   return (
     <div className="space-y-2">
-      {/* Image */}
       <Skeleton className="h-[280px] rounded-lg" />
 
-      {/* country + rating */}
       <div className="flex justify-between items-center">
         <Skeleton className="h-4 w-20 rounded" />
         <Skeleton className="h-4 w-12 rounded" />
       </div>
 
-      {/* Name/title */}
       <Skeleton className="h-4 w-32 rounded" />
 
-      {/* Tagline + price */}
       <div className="flex justify-between items-center">
         <Skeleton className="h-4 w-40 rounded" />
         <Skeleton className="h-4 w-16 rounded" />
