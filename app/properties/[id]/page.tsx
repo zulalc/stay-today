@@ -18,10 +18,13 @@ import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import Loading from "./loading";
 
-/*const DynamicMap = dynamic(() => import("@/components/properties/Map"), {
-  ssr: false,
-  loading: () => <Skeleton className="h-[400px] w-full" />,
-});*/
+const DynamicMap = dynamic(
+  () => import("@/components/properties/PropertyMap"),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-[400px] w-full" />,
+  }
+);
 
 function PropertyDetailsPage() {
   const { id } = useParams() as { id: string };
@@ -45,6 +48,7 @@ function PropertyDetailsPage() {
 
   const firstName = propertyDetails.profile.firstName;
   const profileImage = propertyDetails.profile.profileImage;
+
   return (
     <section>
       <BreadCrumbs name={propertyDetails.name} />
@@ -92,6 +96,7 @@ function PropertyDetailsPage() {
           </div>
 
           <Amenities amenities={propertyDetails.amenities} />
+          <DynamicMap countryCode={propertyDetails.country} />
         </div>
 
         <div className="lg:col-span-4 mt-8 lg:mt-0">
