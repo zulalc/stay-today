@@ -4,6 +4,7 @@ import { useAuth } from "@clerk/nextjs";
 import FavToggleForm from "./FavToggleForm";
 import { fetchFavorite } from "@/utils/actions";
 import { useEffect, useState } from "react";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 function FavToggleButton({
   propertyId,
@@ -30,7 +31,7 @@ function FavToggleButton({
   if (!userId) return <CardSignInButton />;
 
   if (loading) {
-    return <div className="animate-pulse">Loading...</div>;
+    return <ReloadIcon className="h-4 w-4 text-white animate-spin" />;
   }
 
   return (
