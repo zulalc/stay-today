@@ -3,6 +3,7 @@
 import db from "./db";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import {
+  createReviewSchema,
   imageSchema,
   profileSchema,
   propertySchema,
@@ -274,4 +275,87 @@ export const fetchFavorites = async () => {
   });
 
   return favorites.map((favorite) => favorite.property);
+};
+
+//REVIEWS ACTIONS
+export const createReviewAction = async (
+  prevState: { message?: string; error?: Record<string, string[]> },
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+
+  try {
+    const values = Object.fromEntries(formData);
+    const parsedValues = {
+      ...values,
+      rating: parseFloat(values.rating as string),
+    };
+    const validatedFields = validateWithZodSchema(
+      createReviewSchema,
+      parsedValues
+    );
+
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        profileId: user.id,
+      },
+    });
+    revalidatePath("/properties/" + values.propertyId);
+    return { message: "Review created successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+/*export const updateReviewAction = async (
+  prevState: { message?: string; error?: Record<string, string[]> },
+  formData: FormData
+): Promise<{ message: string }> => {
+  const user = await getAuthUser();
+  try {
+    const values = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(createReviewSchema, values);
+
+    await db.review.update({
+      where: { profileId: user.id, propertyId: values.propertyId },
+      data: validatedFields,
+    });
+    revalidatePath("/profile");
+    return { message: "Profile updated successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};*/
+
+export const fetchPropertyReviews = async (propertyId: string) => {
+  const reviews = await db.review.findMany({
+    where: { propertyId },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      createdAt: true,
+      profile: {
+        select: {
+          firstName: true,
+          profileImage: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return { message: "Property reviews fetched successfully!" };
+};
+export const fetchReviewsByUser = async () => {
+  return { message: "User reviews fetched successfully!" };
+};
+export const deleteReview = async () => {
+  return { message: "Review deleted successfully!" };
 };

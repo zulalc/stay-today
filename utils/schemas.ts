@@ -85,3 +85,19 @@ export function validateWithZodSchema<T>(
     firstName: "John",
     lastName: "Doe"
   });**/
+
+export const createReviewSchema = z.object({
+  propertyId: z.string().min(1, { message: "Property ID is required" }),
+  rating: z.coerce.number().min(1).max(5, {
+    message: "Rating must be between 1 and 5",
+  }),
+  comment: z.string().min(10).max(200, { message: "Comment is required" }),
+});
+
+export const updateReviewSchema = z.object({
+  reviewId: z.string().min(1, { message: "Review ID is required" }),
+  rating: z.coerce.number().min(1).max(5, {
+    message: "Rating must be between 1 and 5",
+  }),
+  comment: z.string().min(10).max(200, { message: "Comment is required" }),
+});

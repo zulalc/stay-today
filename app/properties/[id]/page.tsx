@@ -17,6 +17,7 @@ import Amenities from "@/components/properties/Amenities";
 import dynamic from "next/dynamic";
 import { Skeleton } from "@/components/ui/skeleton";
 import Loading from "./loading";
+import SubmitReview from "@/components/reviews/SubmitReview";
 
 const DynamicMap = dynamic(
   () => import("@/components/properties/PropertyMap"),
@@ -97,6 +98,7 @@ function PropertyDetailsPage() {
 
           <Amenities amenities={propertyDetails.amenities} />
           <DynamicMap countryCode={propertyDetails.country} />
+          <SubmitReview propertyId={propertyDetails.id} />
         </div>
 
         <div className="lg:col-span-4 mt-8 lg:mt-0">
