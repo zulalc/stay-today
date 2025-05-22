@@ -332,14 +332,18 @@ export const createReviewAction = async (
   }
 };*/
 
-export const fetchPropertyReviews = async (propertyId: string) => {
+export const fetchPropertyReviews = async ({
+  propertyId,
+}: {
+  propertyId: string;
+}) => {
   const reviews = await db.review.findMany({
     where: { propertyId },
     select: {
       id: true,
       rating: true,
       comment: true,
-      createdAt: true,
+      updatedAt: true,
       profile: {
         select: {
           firstName: true,
@@ -351,8 +355,12 @@ export const fetchPropertyReviews = async (propertyId: string) => {
       createdAt: "desc",
     },
   });
-  return { message: "Property reviews fetched successfully!" };
+  return reviews.map((review) => ({
+    ...review,
+    updatedAt: review.updatedAt.toISOString(),
+  }));
 };
+
 export const fetchReviewsByUser = async () => {
   return { message: "User reviews fetched successfully!" };
 };

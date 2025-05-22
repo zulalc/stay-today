@@ -37,3 +37,14 @@ export type UserInfoProps = {
     firstName: string;
   };
 };
+
+export type ReviewProps = {
+  id: string;
+  profile: {
+    profileImage: string;
+    firstName: string;
+  };
+  rating: number;
+  comment: string;
+  updatedAt: string;
+};
