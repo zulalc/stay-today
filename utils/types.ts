@@ -48,3 +48,14 @@ export type ReviewProps = {
   comment: string;
   updatedAt: string;
 };
+
+export type UserReviewProps = {
+  id: string;
+  property: {
+    name: string;
+    image: string;
+  };
+  rating: number;
+  comment: string;
+  updatedAt: string;
+};

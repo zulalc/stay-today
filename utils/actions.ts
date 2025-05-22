@@ -362,8 +362,31 @@ export const fetchPropertyReviews = async ({
 };
 
 export const fetchReviewsByUser = async () => {
-  return { message: "User reviews fetched successfully!" };
+  const user = await getAuthUser();
+  const reviews = await db.review.findMany({
+    where: { profileId: user.id },
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      updatedAt: true,
+      property: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews.map((review) => ({
+    ...review,
+    updatedAt: review.updatedAt.toISOString(),
+  }));
 };
+
 export const deleteReview = async () => {
   return { message: "Review deleted successfully!" };
 };
