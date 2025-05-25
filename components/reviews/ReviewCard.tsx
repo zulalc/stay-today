@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
-import RatingInput from "../form/RatingInput";
 import Rating from "./Rating";
+import Comment from "./Comment";
 
 interface ReviewCardProps {
   reviewInfo: {
@@ -27,9 +27,7 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
             {reviewInfo.name}
           </h3>
           <Rating rating={reviewInfo.rating} />
-          <p className="text-gray-600 dark:text-gray-300 mt-3 text-sm">
-            {reviewInfo.comment}
-          </p>
+          <Comment comment={reviewInfo.comment} />
         </div>
       </div>
     </Card>
