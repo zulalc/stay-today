@@ -217,6 +217,24 @@ export const fetchPropertyDetails = async (id: string) => {
   });
 };
 
+export async function fetchPropertyRating(propertyId: string) {
+  const reviews = await db.review.groupBy({
+    by: ["propertyId"],
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: { propertyId },
+  });
+
+  return {
+    averageRating: reviews[0]?._avg.rating?.toFixed(1) ?? 0,
+    totalReviews: reviews[0]?._count.rating ?? 0,
+  };
+}
+
 export const fetchFavorite = async ({ propertyId }: { propertyId: string }) => {
   const user = await getAuthUser();
   const favorite = await db.favorite.findFirst({
@@ -387,6 +405,20 @@ export const fetchReviewsByUser = async () => {
   }));
 };
 
-export const deleteReview = async () => {
-  return { message: "Review deleted successfully!" };
+export const deleteReview = async (prevState: { reviewId: string }) => {
+  const user = await getAuthUser();
+  const { reviewId } = prevState;
+
+  try {
+    await db.review.delete({
+      where: { id: reviewId, profileId: user.id },
+    });
+
+    revalidatePath("/reviews");
+    return { message: "Review deleted successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
 };
