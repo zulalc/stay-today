@@ -9,9 +9,10 @@ function Rating({ rating }: { rating: number }) {
       {stars.map((isFilled, i) => {
         return (
           <Button
+            key={i}
             variant="rating"
             size="icon"
-            aria-label={`Rate ${i} star${i > 1 ? "s" : ""}`}
+            aria-label={`Rate ${i + 1} star${i + 1 > 1 ? "s" : ""}`}
           >
             {isFilled ? <FaStar /> : <FaRegStar />}
           </Button>
