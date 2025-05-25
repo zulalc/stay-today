@@ -1,4 +1,6 @@
 "use client";
+import { fetchPropertyRating } from "@/utils/actions";
+import { useEffect, useState } from "react";
 import { BsStarFill } from "react-icons/bs";
 
 function PropertyRating({
@@ -8,8 +10,32 @@ function PropertyRating({
   propertyId: string;
   inPage: boolean;
 }) {
-  const rating = 3.5;
-  const totalReviews = 100;
+  const [rating, setRating] = useState<number | null>(null);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRating() {
+      setLoading(true);
+      try {
+        const { averageRating, totalReviews } = await fetchPropertyRating(
+          propertyId
+        );
+        setRating(Number(averageRating));
+        setTotalReviews(totalReviews);
+      } catch (error) {
+        console.error("Error fetching rating:", error);
+        setRating(null);
+        setTotalReviews(0);
+      }
+      setLoading(false);
+    }
+
+    fetchRating();
+  }, [propertyId]);
+
+  if (loading || totalReviews === 0 || rating === null) return null;
+
   const className = `flex gap-1 items-center ${inPage ? "text-md" : "text-xs"}`;
   const reviewCount = totalReviews > 1 ? "reviews" : "review";
   const reviewValue = `(${totalReviews} ${inPage ? reviewCount : ""})`;
