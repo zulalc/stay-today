@@ -1,11 +1,14 @@
 "use client";
 
-import { fetchReviewsByUser } from "@/utils/actions";
+import { deleteReview, fetchReviewsByUser } from "@/utils/actions";
 import { UserReviewProps } from "@/utils/types";
 import Title from "@/components/properties/Title";
 import { useEffect, useState } from "react";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import Loading from "@/components/reviews/Loading";
+import EmptyList from "@/components/home/EmptyList";
+import FormContainer from "@/components/form/FormContainer";
+import { ActionButton } from "@/components/form/Buttons";
 
 function Reviews() {
   const [reviews, setReviews] = useState<UserReviewProps[] | null>(null);
@@ -29,8 +32,7 @@ function Reviews() {
 
   if (loading) return <Loading />;
 
-  if (!reviews || reviews.length === 0)
-    return <p className="text-muted-foreground mt-4">No reviews yet.</p>;
+  if (!reviews || reviews.length === 0) return <EmptyList />;
 
   return (
     <>
@@ -45,11 +47,24 @@ function Reviews() {
             name,
             image,
           };
-          return <ReviewCard key={review.id} reviewInfo={reviewInfo} />;
+          return (
+            <ReviewCard key={review.id} reviewInfo={reviewInfo}>
+              <DeleteReview reviewId={review.id} />
+            </ReviewCard>
+          );
         })}
       </div>
     </>
   );
 }
+
+const DeleteReview = ({ reviewId }: { reviewId: string }) => {
+  const handleDelete = deleteReview.bind(null, { reviewId });
+  return (
+    <FormContainer action={handleDelete}>
+      <ActionButton actionType="delete" />
+    </FormContainer>
+  );
+};
 
 export default Reviews;

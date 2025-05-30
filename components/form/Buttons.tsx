@@ -5,6 +5,7 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import { SignInButton } from "@clerk/nextjs";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import clsx from "clsx";
+import { FaPenSquare, FaTrashAlt } from "react-icons/fa";
 
 type btnSize = "default" | "sm" | "lg";
 
@@ -13,6 +14,8 @@ type SubmitButtonProps = {
   text?: string;
   size?: btnSize;
 };
+
+type actionType = "edit" | "delete";
 
 export function SubmitButton({
   className = "",
@@ -38,13 +41,17 @@ export const CardSignInButton = () => {
   return (
     <SignInButton mode="modal">
       <Button
-        type="button"
+        type="submit"
         size="icon"
-        variant="outline"
+        variant="ghost"
         className="p-2 cursor-pointer"
         asChild
       >
-        <BsHeart />
+        <BsHeartFill
+          className={clsx(
+            "drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] group-hover:text-gray-900 transition-all"
+          )}
+        />
       </Button>
     </SignInButton>
   );
@@ -59,8 +66,10 @@ export const CardSubmitButton = ({
   isFavorite,
   variant = "favtogglebutton",
 }: CardSubmitButtonProps) => {
+  console.log("Button variant3:", variant);
   const { pending } = useFormStatus();
   const textColor = variant === "ghost" ? "text-black" : "text-white";
+
   return (
     <Button
       type="submit"
@@ -84,6 +93,26 @@ export const CardSubmitButton = ({
             textColor
           )}
         />
+      )}
+    </Button>
+  );
+};
+
+export const ActionButton = ({ actionType }: { actionType: actionType }) => {
+  const { pending } = useFormStatus();
+  return (
+    <Button
+      type="submit"
+      size="icon"
+      variant="link"
+      className="p-2 cursor-pointer"
+    >
+      {pending ? (
+        <ReloadIcon className="h-4 w-4 animate-spin" />
+      ) : actionType === "edit" ? (
+        <FaPenSquare />
+      ) : (
+        <FaTrashAlt className="text-red-500" />
       )}
     </Button>
   );
