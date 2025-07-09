@@ -32,11 +32,20 @@ function Reviews() {
 
   if (loading) return <Loading />;
 
-  if (!reviews || reviews.length === 0) return <EmptyList />;
+  if (!reviews || reviews.length === 0)
+    return (
+      <div className="flex justify-center items-center h-[300px]">
+        <EmptyList
+          heading="No Reviews"
+          message="Reviews will appear here once you have reviewed a property."
+          btnText="Browse Listings"
+        />
+      </div>
+    );
 
   return (
     <>
-      <Title text="My Reviews" />
+      <h1 className="text-3xl font-semibold mb-8 text-center">My Reviews</h1>
       <div className="grid md:grid-cols-2 gap-8 mt-4 ">
         {reviews.map((review) => {
           const { comment, rating } = review;
