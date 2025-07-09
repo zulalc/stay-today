@@ -4,7 +4,7 @@ import { Skeleton } from "../ui/skeleton";
 function Loading() {
   return (
     <section className="mt-4 grid gap-8 sm:grid-cols-2 md:grid-cols-2">
-      {Array.from({ length: 4 }).map((_, i) => (
+      {Array.from({ length: 2 }).map((_, i) => (
         <LoadingCard key={i} />
       ))}
     </section>

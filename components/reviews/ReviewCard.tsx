@@ -32,7 +32,7 @@ function ReviewCard({ reviewInfo, children }: ReviewCardProps) {
             </h3>
             <div>{children}</div>
           </div>
-          <Rating rating={reviewInfo.rating} />
+          <Rating rating={reviewInfo.rating} readOnly />
           <Comment comment={reviewInfo.comment} />
         </div>
       </div>

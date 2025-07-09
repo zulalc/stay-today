@@ -1,7 +1,13 @@
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { Button } from "../ui/button";
 
-function Rating({ rating }: { rating: number }) {
+function Rating({
+  rating,
+  readOnly = false,
+}: {
+  rating: number;
+  readOnly?: boolean;
+}) {
   const stars = Array.from({ length: 5 }, (_, i) => i + 1 <= rating);
 
   return (
@@ -13,6 +19,7 @@ function Rating({ rating }: { rating: number }) {
             variant="rating"
             size="icon"
             aria-label={`Rate ${i + 1} star${i + 1 > 1 ? "s" : ""}`}
+            className={`p-0  ${readOnly ? "pointer-events-none " : ""}`}
           >
             {isFilled ? <FaStar /> : <FaRegStar />}
           </Button>
