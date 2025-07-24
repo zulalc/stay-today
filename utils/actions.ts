@@ -422,3 +422,14 @@ export const deleteReview = async (prevState: { reviewId: string }) => {
     };
   }
 };
+
+export const findExistingReview = async (
+  userId: string,
+  propertyId: string
+) => {
+  const existingRev = await db.review.findFirst({
+    where: { profileId: userId, propertyId: propertyId },
+  });
+
+  return existingRev;
+};

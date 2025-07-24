@@ -5,10 +5,10 @@ import BookingCalendar from "@/components/properties/booking/BookingCalendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import ImageContainer from "@/components/properties/ImageContainer";
 import ShareButton from "@/components/properties/ShareButton";
-import { fetchPropertyDetails } from "@/utils/actions";
+import { fetchPropertyDetails, findExistingReview } from "@/utils/actions";
 import { PropertyDetailsProps } from "@/utils/types";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import PropertyDetails from "@/components/properties/PropertyDetails";
 import UserInfo from "@/components/properties/UserInfo";
 import { Separator } from "@/components/ui/separator";
@@ -19,6 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Loading from "./loading";
 import SubmitReview from "@/components/reviews/SubmitReview";
 import PropertyReviews from "@/components/reviews/PropertyReviews";
+import { useUser } from "@clerk/nextjs";
 
 const DynamicMap = dynamic(
   () => import("@/components/properties/PropertyMap"),
@@ -29,11 +30,17 @@ const DynamicMap = dynamic(
 );
 
 function PropertyDetailsPage() {
-  const { id } = useParams() as { id: string };
+  const { id } = useParams() as { id: string }; //property id
   const router = useRouter();
+  const { user } = useUser();
+  const userId = user?.id;
 
   const [propertyDetails, setPropertyDetails] =
     useState<PropertyDetailsProps | null>(null);
+  const [hasNotReviewed, setHasNotReviewed] = useState(false);
+  const [notOwner, setNotOwner] = useState(false);
+
+  //fetch property details
   useEffect(() => {
     if (!id) return;
 
@@ -46,10 +53,22 @@ function PropertyDetailsPage() {
     });
   }, [id, router]);
 
+  // Check if the user can review the property
+  useEffect(() => {
+    if (!userId || !propertyDetails) return;
+    const notOwner = userId !== propertyDetails.profile.id;
+    setNotOwner(notOwner);
+
+    if (notOwner) {
+      findExistingReview(userId, propertyDetails.id).then((reviewExists) => {
+        setHasNotReviewed(Boolean(reviewExists));
+      });
+    }
+  }, [userId, propertyDetails]);
+
   if (!propertyDetails) return <Loading />;
 
-  const firstName = propertyDetails.profile.firstName;
-  const profileImage = propertyDetails.profile.profileImage;
+  const { firstName, profileImage } = propertyDetails.profile;
 
   return (
     <section>
@@ -99,7 +118,8 @@ function PropertyDetailsPage() {
 
           <Amenities amenities={propertyDetails.amenities} />
           <DynamicMap countryCode={propertyDetails.country} />
-          <SubmitReview propertyId={propertyDetails.id} />
+
+          {hasNotReviewed && <SubmitReview propertyId={propertyDetails.id} />}
           <PropertyReviews propertyId={propertyDetails.id} />
         </div>
 

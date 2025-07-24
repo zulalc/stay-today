@@ -28,6 +28,7 @@ export type PropertyDetailsProps = {
   profile: {
     profileImage: string;
     firstName: string;
+    id: string;
   };
 };
 
