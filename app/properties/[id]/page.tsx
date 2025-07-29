@@ -1,14 +1,13 @@
 "use client";
 import FavToggleButton from "@/components/card/FavToggleButton";
 import PropertyRating from "@/components/card/PropertyRating";
-import BookingCalendar from "@/components/properties/booking/BookingCalendar";
 import BreadCrumbs from "@/components/properties/BreadCrumbs";
 import ImageContainer from "@/components/properties/ImageContainer";
 import ShareButton from "@/components/properties/ShareButton";
 import { fetchPropertyDetails, findExistingReview } from "@/utils/actions";
 import { PropertyDetailsProps } from "@/utils/types";
 import { useParams, useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropertyDetails from "@/components/properties/PropertyDetails";
 import UserInfo from "@/components/properties/UserInfo";
 import { Separator } from "@/components/ui/separator";
@@ -26,6 +25,14 @@ const DynamicMap = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton className="h-[400px] w-full" />,
+  }
+);
+
+const DynamicBookingWrapper = dynamic(
+  () => import("@/components/booking/BookingWrapper"),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-[200px] w-full" />,
   }
 );
 
@@ -125,7 +132,11 @@ function PropertyDetailsPage() {
 
         <div className="lg:col-span-4 mt-8 lg:mt-0">
           <div className="sticky top-20">
-            <BookingCalendar />
+            <DynamicBookingWrapper
+              propertyId={propertyDetails.id}
+              price={propertyDetails.price}
+              bookings={propertyDetails.bookings}
+            />
           </div>
         </div>
       </section>
