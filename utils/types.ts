@@ -30,6 +30,7 @@ export type PropertyDetailsProps = {
     firstName: string;
     id: string;
   };
+  bookings: BookingProps[];
 };
 
 export type UserInfoProps = {
@@ -59,4 +60,30 @@ export type UserReviewProps = {
   rating: number;
   comment: string;
   updatedAt: string;
+};
+
+export type BookingProps = {
+  checkIn: Date;
+  checkOut: Date;
+};
+
+export type DateRangeSelect = {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+};
+
+export type BookingDetailsProps = {
+  id: string;
+  property: {
+    id: string;
+    name: string;
+    image: string;
+    country: string;
+  };
+  checkIn: Date;
+  checkOut: Date;
+  totalFee: number;
+  totalNights: number;
+  paymentStatus: boolean;
 };

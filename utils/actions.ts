@@ -12,6 +12,7 @@ import {
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { uploadImage } from "./supabase";
+import { calculateTotals } from "./calculateFee";
 
 const getAuthUser = async () => {
   const user = await currentUser();
@@ -213,6 +214,12 @@ export const fetchPropertyDetails = async (id: string) => {
     where: { id },
     include: {
       profile: true,
+      bookings: {
+        select: {
+          checkIn: true,
+          checkOut: true,
+        },
+      },
     },
   });
 };
@@ -433,3 +440,102 @@ export const findExistingReview = async (
 
   return existingRev;
 };
+
+export const createBookingAction = async ({
+  propertyId,
+  checkIn,
+  checkOut,
+}: {
+  propertyId: string;
+  checkIn: Date;
+  checkOut: Date;
+}) => {
+  const user = await getAuthUser();
+  if (!user?.id) {
+    return { message: "User not authenticated" };
+  }
+
+  if (checkOut <= checkIn) {
+    return { message: "Check-out must be after check-in" };
+  }
+
+  // Remove unpaid bookings
+  await db.booking.deleteMany({
+    where: {
+      profileId: user.id,
+      paymentStatus: false,
+    },
+  });
+
+  const property = await db.property.findUnique({
+    where: { id: propertyId },
+    select: { price: true },
+  });
+
+  if (!property) {
+    return { message: "Property not found" };
+  }
+
+  const { totalFee, totalNights } = calculateTotals({
+    checkIn,
+    checkOut,
+    price: property.price,
+  });
+
+  try {
+    const booking = await db.booking.create({
+      data: {
+        checkIn,
+        checkOut,
+        totalFee,
+        totalNights,
+        profileId: user.id,
+        propertyId,
+      },
+    });
+
+    redirect(`/checkout?bookingId=${booking.id}`);
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+};
+
+export const fetchBookings = async () => {
+  const user = await getAuthUser();
+  const bookings = await db.booking.findMany({
+    where: { profileId: user.id },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          country: true,
+        },
+      },
+    },
+    orderBy: { checkIn: "desc" },
+  });
+
+  return bookings;
+};
+
+export async function deleteBookingAction(prevState: { bookingId: string }) {
+  const user = await getAuthUser();
+  const { bookingId } = prevState;
+
+  try {
+    await db.booking.delete({
+      where: { id: bookingId, profileId: user.id },
+    });
+
+    revalidatePath("/bookings");
+    return { message: "Booking deleted successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+}
