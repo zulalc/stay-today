@@ -441,6 +441,8 @@ export const findExistingReview = async (
   return existingRev;
 };
 
+//BOOKING ACTIONS
+
 export const createBookingAction = async ({
   propertyId,
   checkIn,
@@ -533,6 +535,69 @@ export async function deleteBookingAction(prevState: { bookingId: string }) {
 
     revalidatePath("/bookings");
     return { message: "Booking deleted successfully!" };
+  } catch (error) {
+    return {
+      message: error instanceof Error ? error.message : "An error occurred",
+    };
+  }
+}
+
+//RENTALS ACTIONS
+
+export const fetchRentals = async () => {
+  const user = await getAuthUser();
+  const rentals = await db.property.findMany({
+    where: { profileId: user.id },
+    select: {
+      id: true,
+      name: true,
+      country: true,
+      price: true,
+    },
+  });
+
+  const rentalwBookingsSums = await Promise.all(
+    rentals.map(async (rental) => {
+      const totalNightSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          totalNights: true,
+        },
+      });
+
+      const totalFeeSum = await db.booking.aggregate({
+        where: {
+          propertyId: rental.id,
+        },
+        _sum: {
+          totalFee: true,
+        },
+      });
+
+      return {
+        ...rental,
+        totalNightSum: totalNightSum._sum.totalNights,
+        totalFeeSum: totalFeeSum._sum.totalFee,
+      };
+    })
+  );
+
+  return rentalwBookingsSums;
+};
+
+export async function deleteRentalAction(prevState: { propertyId: string }) {
+  const user = await getAuthUser();
+  const { propertyId } = prevState;
+
+  try {
+    await db.property.delete({
+      where: { id: propertyId, profileId: user.id },
+    });
+
+    revalidatePath("/rentals");
+    return { message: "Rental deleted successfully!" };
   } catch (error) {
     return {
       message: error instanceof Error ? error.message : "An error occurred",

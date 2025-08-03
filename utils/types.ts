@@ -87,3 +87,12 @@ export type BookingDetailsProps = {
   totalNights: number;
   paymentStatus: boolean;
 };
+
+export type RentalsProps = {
+  id: string;
+  name: string;
+  country: string;
+  price: number;
+  totalNightSum: number | null;
+  totalFeeSum: number | null;
+};
